@@ -1,0 +1,129 @@
+#include <stdio.h>
+#include <stdlib.h>
+int somme(int T[3][3],int n,int m,int s,int k) {
+    if (s==n) {
+        return 0;
+    }
+    if (k==m-1) {
+        return T[s][k]+somme(T,n,m,s+1,0);
+    } else {
+        return T[s][k]+somme(T,n,m,s,k+1);
+    }
+}
+int rech(int T[3][3],int n,int m,int p,int s,int k) {
+    if (s==n) {
+        return 0;
+    }
+    if (T[s][k]==p) {
+        return 1;
+    }
+    if (k==m-1)
+        return rech(T,n,m,p,s+1,0);
+    else
+        return rech(T,n,m,p,s,k+1);
+}
+int transpose(int T[3][3],int n,int m,int s,int k) {
+    if (s==n-1&&k==m-1) {
+        return 0;
+    }
+    int temp=T[s][k];
+    T[s][k]=T[k][s];
+    T[k][s]=temp;
+
+    if (k==m-1) {
+        transpose(T,n,m,s+1,s+1);
+    } else {
+        transpose(T,n,m,s,k+1);
+    }
+}
+int tri(int T[], int s, int b) {
+	int j,pivot,l,num_de_la_case,i;
+    if (s<b) {
+        pivot=T[b];
+        i=s-1;   
+        for(j=s;j<=b-1;j++) {
+            if (T[j]<=pivot) {
+                i++;
+                l=T[i];
+                T[i]=T[j];
+                T[j]=l;
+            }
+    }
+        l=T[i+1];
+        T[i+1]=T[b];
+        T[b]=l; 
+        num_de_la_case=i+1;       
+        tri(T,s,num_de_la_case-1);
+        tri(T,num_de_la_case+1,b);
+    }
+}
+int main() {
+    int T[3][3];
+int n=3,m=3,i,j,s=0,k=0,b=m-1;
+int r;
+    for (i=0;i<n;i++) {
+        for (j=0;j<m;j++) {
+            printf("entrez la valeur de [%d][%d]: ",i,j);
+            scanf("%d", &T[i][j]);
+        }
+    }
+    printf("si tu veux calculer la somme du la matrice inserer 1 \n");
+    printf("si tu veux rechercher un element dans la matrice inserer 2 \n");
+	 printf("si tu veux transposer la matrice inserer 3 \n");
+	 printf("si tu veux trier la matrice inserer 4 \n");
+	 printf("tu veux faire quoi avec cette matrice:");
+	 scanf("%d",&r);
+	 switch(r){
+	 	case 1:
+	 		printf("la somme est: %d\n",somme(T,n,m,s,k));
+	 		break;
+	 	case 2:
+	 		  int p;
+    printf("entrez la valeur a rchercher:");
+    scanf("%d", &p);
+
+    if (rech(T,n,m,p,s,k) == 1) {
+        printf("la valeur %d existe dans la matrice\n",p);
+    } else {
+        printf("la valeur %d existe pas dans la matrice\n",p);
+    }
+	break;
+	case 3:
+	printf("matrice normale:\n");
+    for (i=0;i<n;i++) {
+        for (j=0;j<m;j++) {
+            printf("%d ",T[i][j]);
+        }
+        printf("\n");
+    }
+    transpose(T,n,m ,s,k);
+    printf("matrice transpose:\n");
+    for (i=0;i<n;i++) {
+        for (j=0;j<m;j++) {
+            printf("%d ",T[i][j]);
+        }
+        printf("\n");
+    }
+	break;
+	case 4:
+ printf("matrice normale:\n");
+       for (i=0;i<n;i++) {
+        for (j=0;j<m;j++) {
+            printf("%d ",T[i][j]);
+        }
+        printf("\n");
+    }
+        for(i=0;i<n;i++) {
+        tri(T[i],s,b);
+    }
+    printf("matrice trier:\n");
+       for (i=0;i<n;i++) {
+        for (j=0;j<m;j++) {
+            printf("%d ",T[i][j]);
+        }
+        printf("\n");
+    }
+break;		
+	 } 
+    return 0;
+}
